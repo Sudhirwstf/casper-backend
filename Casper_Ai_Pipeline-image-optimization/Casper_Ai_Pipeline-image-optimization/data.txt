@@ -1,0 +1,11 @@
+Apple elevates the iPhone experience with iOS 26
+The release delivers a stunning new design, powerful Apple Intelligence capabilities, new ways to stay connected in the Phone and Messages apps, and exciting updates to CarPlay, Apple Music, Maps, and Wallet
+
+
+
+Five iPhone 16 devices show updates from iOS 26.
+iOS 26 is a major update that brings a beautiful new design, intelligent experiences, and improvements to the apps users rely on every day.
+CUPERTINO, CALIFORNIA Apple today previewed iOS 26, a major update that brings a beautiful new design, intelligent experiences, and improvements to the apps users rely on every day. The new design provides a more expressive and delightful experience across the system while maintaining the instant familiarity of iOS. Integrated throughout the system and built with privacy from the ground up, Apple Intelligence gets even more capable. Updates to the Phone and Messages apps help users stay connected while eliminating distractions like unwanted calls. iOS 26 also introduces new features in CarPlay, Apple Music, Maps, and Wallet, as well as Apple Games, a brand-new app that gives players a single destination for all their games.
+“iOS 26 shines with the gorgeous new design and meaningful improvements to the features users rely on every day, making iPhone even more helpful,” said Craig Federighi, Apple’s senior vice president of Software Engineering. “Experiences are more expressive and personal, from the Lock Screen and Home Screen, to new capabilities across Phone and Messages that help users focus on the connections that matter most. And with powerful new Apple Intelligence capabilities integrated across the system, users can get things done easier than ever.”
+A Beautiful New Look
+The new design makes apps and system experiences more expressive and delightful, while keeping iOS instantly familiar. It’s crafted with Liquid Glass — a new translucent material that reflects and refracts its surroundings, bringing greater focus to content, and delivering a new level of vitality across controls, navigation, app icons, widgets, and more. The new design extends to the Home Screen and Lock Screen, making them more personal and expressive than ever. Liquid Glass also brings new customisation options to app icons and widgets, including a stunning clear look.
