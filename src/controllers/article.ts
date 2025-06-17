@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import dbservices from "../services/dbservices";
 import { ArticleServices } from "../services/dbservices/articles";
+import ImageGenerationHelper from "../helper/ImageGeneration";
 
 // platform must be array of social media
 type Platform =
@@ -216,7 +217,8 @@ export default class articleController {
 
   static generateImage = async (req: Request, res: Response): Promise<void> => {
     try {
-      const {userPrompt,platform}=req.body.userPrompt
+      const {userPrompt,platforms,isImageRequired}=req.body.userPrompt
+      const generatedImage=await ImageGenerationHelper()
      
     } catch (error) {
       res.status(500).json({ status: false, message: error });
