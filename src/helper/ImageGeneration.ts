@@ -8,7 +8,7 @@ import { spawn } from "child_process";
 import path from "path";
 
 function ImageGenerationHelper(
-  
+  userPrompt:string,platforms:string[],isImageRequired:Boolean
 ): Promise<{uuid: string } | null> {
   console.log("__dirname:", __dirname);
 

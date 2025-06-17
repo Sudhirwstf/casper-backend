@@ -218,7 +218,7 @@ export default class articleController {
   static generateImage = async (req: Request, res: Response): Promise<void> => {
     try {
       const {userPrompt,platforms,isImageRequired}=req.body.userPrompt
-      const generatedImage=await ImageGenerationHelper()
+      const generatedImage=await ImageGenerationHelper(userPrompt,platforms,isImageRequired)
      
     } catch (error) {
       res.status(500).json({ status: false, message: error });
