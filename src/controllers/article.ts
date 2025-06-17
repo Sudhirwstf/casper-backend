@@ -216,7 +216,7 @@ export default class articleController {
 
   static generateImage = async (req: Request, res: Response): Promise<void> => {
     try {
-      const {userPrompt}=req.body.userPrompt
+      const {userPrompt,platform}=req.body.userPrompt
      
     } catch (error) {
       res.status(500).json({ status: false, message: error });
