@@ -217,8 +217,10 @@ export default class articleController {
 
   static generateImage = async (req: Request, res: Response): Promise<void> => {
     try {
+
+       const args = ['./ImageModule/main.py', './ImageModule/bottle.png', '--platforms', 'instagram', '--use-ai'];
       const {userPrompt,platforms,isImageRequired}=req.body.userPrompt
-      const generatedImage=await ImageGenerationHelper(userPrompt,platforms,isImageRequired)
+      const generatedImage=await ImageGenerationHelper(args)
      
     } catch (error) {
       res.status(500).json({ status: false, message: error });

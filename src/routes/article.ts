@@ -1,8 +1,9 @@
 import express from "express"
 import controllers from "../controllers";
 import validators from "../validators";
-import { validateRequest } from "../middleware";
+import { authenticateUser, validateRequest } from "../middleware";
 import articleController from "../controllers/article";
+import { auth } from "../controllers/auth";
 
 const router=express.Router()
 
@@ -114,7 +115,7 @@ const router=express.Router()
  *                   example: Internal Server Error
  */
 
-router.post('/generate-article', articleController.generateArticle);
+router.post('/generate-article',authenticateUser, articleController.generateArticle);
 
 router.post('/generate-image',articleController.generateImage);
 

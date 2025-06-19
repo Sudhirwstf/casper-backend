@@ -4,19 +4,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
-import { spawn } from "child_process";
+import { ChildProcess, spawn } from "child_process";
 import path from "path";
+import { child } from "winston";
 
-function ImageGenerationHelper(
-  userPrompt:string,platforms:string[],isImageRequired:Boolean
-): Promise<{uuid: string } | null> {
+function ImageGenerationHelper( args: string[]): Promise<{uuid: string } | null> {
   console.log("__dirname:", __dirname);
 
+ 
+
+const pythonProcess = spawn('python', args);
   return new Promise((resolve, reject) => {
-    const python = spawn("python", [
-      "./Casper_Ai_Pipeline-image-optimization/Casper_Ai_Pipeline-image-optimization/main.py",
-  
-    ]);
+    const python = spawn("python", args);
 
 
    
@@ -28,6 +27,7 @@ function ImageGenerationHelper(
     python.stderr.on("data", (data) => {
       const text = data.toString();
       console.error(`stderr: ${text}`);
+   
 
      
     });

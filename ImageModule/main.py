@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 """
 Enhanced Multi-Platform Social Media Optimizer - Command Line Orchestration with Compiler Integration
@@ -5,12 +6,8 @@ A comprehensive tool for optimizing images and content across multiple social me
 now with integrated product photography generation and automatic caption compilation.
 """
 
-
-from dotenv import load_dotenv
-load_dotenv()
-
 import os
-import sys
+import sys,io
 import argparse
 import logging
 import json
@@ -24,6 +21,8 @@ import tempfile
 from PIL import Image
 from dotenv import load_dotenv
 
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 # Import custom modules (ensure these are in the same directory)
 try:
     from imgprocess import SocialMediaImageOptimizer

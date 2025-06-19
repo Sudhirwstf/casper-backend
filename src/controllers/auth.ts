@@ -21,7 +21,7 @@ export class auth{
       console.log("token:", token);
       let clientId = envConfigs.googleClientId;
       let clientSecret = envConfigs.googleClientSecret;
-      let REDIRECT_URI = envConfigs.frontendRedirectUrl;
+      let REDIRECT_URI = envConfigs.redirectUri;
       console.log("REDIRECT_URI ", REDIRECT_URI);
 
       const validateUser = await axios.post(
@@ -35,6 +35,8 @@ export class auth{
         }
       );
       console.log("done");
+      
+
       const { id_token, access_token } = validateUser.data;
       const { email, name, picture } = await axios
         .get(
@@ -51,20 +53,20 @@ export class auth{
         });
       if (!email) throw new Error("Error fetching email please try again");
       const genToken = await dbservices.auth.googleLogIn(email, name, picture);
+      
 
-      // const accessToken = genToken.token
+      
       const userDetails = {
         id: genToken.user.id,
-        name: genToken.user.firstName + " " + genToken.user.lastName,
+        name: genToken.user.name,
         picture,
         email: genToken.user.email,
         accessToken: genToken.token,
-        userBlogApiKey: genToken.userBlogApiKey ?? null,
-        blogUrl: genToken.blogUrl ?? null,
+       
       };
-      console.log("user Details", userDetails);
+      console.log("acessToken :", genToken.token);
 
-      let FRONTEND_REDIRECT_URL = envConfigs.frontendRedirectUrl;
+      let FRONTEND_REDIRECT_URL = process.env.FRONTEND_REDIRECT_URL;
 
       return res.redirect(
         url.format({
@@ -76,7 +78,7 @@ export class auth{
       console.log(error);
       logger.error(`Error in google auth:${error}`);
 
-      let FRONTEND_REDIRECT_URL = envConfigs.frontendRedirectUrl;
+      let FRONTEND_REDIRECT_URL = envConfigs.redirectUri;
 
       return res.redirect(
         url.format({

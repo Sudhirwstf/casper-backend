@@ -18,11 +18,11 @@ export class auth{
         .where(eq(users.email, email))
         .limit(1);
       if (user.length <= 0) {
-        const nameParts = name.split(" ");
+        
         const user: any = await postgreDb
           .insert(users)
           .values({
-            name: nameParts[0],
+            name: name,
             email: email,
             phoneNumber: "null",
             password: "null",

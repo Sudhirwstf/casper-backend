@@ -4,7 +4,7 @@ import validators from "../validators";
 import { validateRequest } from "../middleware";
 const router=express.Router()
 
-// router.get('/google-login',validateRequest(validators.auth.googleLogin),controllers.auth.googleSignInSignUp);
+router.get('/google',controllers.auth.googleSignInSignUp);
 
 
 
