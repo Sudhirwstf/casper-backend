@@ -1,0 +1,104 @@
+ Would you like to perform product photography enhancement? (y/n):
+
+  Enter the path to your logo image (or press Enter to skip):
+
+  Choose a photography style:
+   1. FLOATING PHOTOGRAPHY
+   2. FLAT LAY PHOTOGRAPHY
+   3. LIFESTYLE PHOTOGRAPHY
+   4. PRODUCT ART PHOTOGRAPHY
+   5. MACRO PHOTOGRAPHY
+   6. DARK AND MOODY
+   7. SOLID BACKGROUND
+Enter your choice (1-7):
+
+
+if 7 is sselected then
+
+🎨 Choose a background color:
+   1. Sage Green
+   2. Sea Blue
+   3. White
+   4. Cream
+   5. Blush Pink
+   6. Mint Green
+   7. Sky Blue
+   8. Lavender
+   9. Soft Gray
+   10. Peach
+   11. Dusty Rose
+   12. Pale Yellow
+   13. Light Coral
+   14. Powder Blue
+   15. Seafoam Green
+Enter your color choice (1-15):
+
+
+
+
+
+//chekout
+📋 Compiled files:
+   1. fa26cb9d_instagram_final_readable_20250626_131100.txt
+
+
+🎯 Ready-to-Use Content:
+   📝 Check 'compiled_captions' folder for ready-to-post content
+   📋 Each platform has optimized captions with posting tips
+   🕐 Best posting times included in caption files
+
+
+
+-->use below to target uuid
+
+INFO:__main__:📋 Compiling caption for: c9941972_facebook_final_data_20250626_131843.json
+
+-->when terminal shows 
+🎯 Ready-to-Use Content:
+   📝 Check 'compiled_captions' folder for ready-to-post content
+   📋 Each platform has optimized captions with posting tips
+   🕐 Best posting times included in caption files
+
+-->then extract all file from compiled_captions.txt
+-->extract uuid starting and including _combined_data_  .json file
+
+
+
+
+
+
+
+//-----------------------------
+
+python main.py photo.jpg --platforms instagram facebook --description "Social media post"
+python main.py photo.jpg --platforms linkedin x.com --use-ai
+python main.py photo.jpg --platforms instagram pinterest --description "Creative content" --use-ai
+
+
+
+
+// test cases--------------------
+
+Case 1: Only description (no AI)
+ {
+  "platforms": "instagram,facebook",
+  "description": "Social media post",
+  "useAI": "false",
+  "styleChoice": "3"
+}
+
+Case 2: Only AI (no description)
+{
+  "platforms": "linkedin,x.com",
+  "useAI": "true",
+  "styleChoice": "4"
+}
+
+Case 3: Both description and AI
+{
+  "platforms": "instagram,pinterest",
+  "description": "Creative content",
+  "useAI": "true",
+  "styleChoice": "7",
+  "colorChoice": "11"
+}

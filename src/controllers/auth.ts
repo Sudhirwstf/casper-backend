@@ -76,9 +76,9 @@ export class auth{
       );
     } catch (error) {
       console.log(error);
-      logger.error(`Error in google auth:${error}`);
+      //logger.error(`Error in google auth:${error}`);
 
-      let FRONTEND_REDIRECT_URL = envConfigs.redirectUri;
+      let FRONTEND_REDIRECT_URL = process.env.FRONTEND_REDIRECT_URL;
 
       return res.redirect(
         url.format({
@@ -88,6 +88,6 @@ export class auth{
       );
     }
   };
-
+  
       
 }

@@ -4,6 +4,27 @@ import validators from "../validators";
 import { authenticateUser, validateRequest } from "../middleware";
 import articleController from "../controllers/article";
 import { auth } from "../controllers/auth";
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs'
+import multer from 'multer';
+
+
+
+
+const uploadDir=fs.existsSync("uploads")?"uploads":fs.mkdirSync("uploads");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  },
+});
+
+export const upload = multer({ storage });
 
 const router=express.Router()
 
@@ -117,7 +138,7 @@ const router=express.Router()
 
 router.post('/generate-article',authenticateUser, articleController.generateArticle);
 
-router.post('/generate-image',articleController.generateImage);
+router.post('/generate-image',upload.single('image'), articleController.generateContentImage);
 
 
 
