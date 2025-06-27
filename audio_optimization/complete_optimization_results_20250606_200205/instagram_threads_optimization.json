@@ -1,0 +1,110 @@
+{
+  "platform": {
+    "name": "Instagram Threads",
+    "key": "instagram_threads",
+    "content_style": "casual",
+    "use_citations": false,
+    "max_length": 500,
+    "image_count": 1
+  },
+  "content": {
+    "optimized_text": "🚨 Breaking Political News Alert! 🚨 \n\nThings just got spicy between Trump and Elon Musk! 😳 After Musk slammed Trump’s tax and spending bill, the two started trading some serious insults. \n\nTrump called Musk “deranged” and hinted at cutting his government contracts. Meanwhile, Musk, who helped get Trump elected, fired back, saying he’s ungrateful and even suggested a new political party! \n\nTesla’s stock took a hit, dropping 14%—yikes! What’s next for these two? Stay tuned! 👀",
+    "character_count": 477,
+    "hashtags": [
+      "#election",
+      "#usa",
+      "#tech",
+      "#trump"
+    ],
+    "optimal_posting_time": "Based on the analysis of audience behavior and engagement patterns regarding political content on Instagram Threads, here are two optimal posting times:\n\nTIME 1: Tuesday 8PM - Post-dinner engagement peaks for users  \nTIME 2: Sunday 3PM - Afternoon leisure time for political discussions"
+  },
+  "engagement": {
+    "tagging_profiles": {
+      "tagging_accounts": [
+        {
+          "handle": "@abcnews",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@fivethirtyeight",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@cnbc",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@tesla",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@spacex",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@politico",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@motherjones",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@stasstalksstocks",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@cb_doge",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@ryanhansenspace",
+          "description": "Relevant account for politics content"
+        },
+        {
+          "handle": "@ccnreliablesources",
+          "description": "Relevant account for politics content"
+        }
+      ],
+      "platform": "threads",
+      "niche": "politics",
+      "discovery_results": "Okay, I will search for active and relevant THREADS accounts/usernames related to the content analysis you described. Due to the limitations of directly accessing and searching the Threads platform in real-time, I will use web search to identify potential accounts based on the keywords, hashtags, and target account types you provided. I will focus on finding accounts that are likely to be active and have a substantial following.\n\nOkay, based on the search results, here are some potential THREADS accounts that might be relevant to your content analysis. Please note that due to the nature of social media and the limitations of search, activity levels and follower counts may vary. I recommend verifying these accounts directly on the Threads platform.\n\n**FOUND THREADS ACCOUNTS:**\n\n**🏢 ORGANIZATIONS/COMPANIES:**\n\n*   **@abcnews** - News organization that covers a wide range of topics, including politics and business. (Source: 21)\n*   **@fivethirtyeight** - A data-driven news and analysis agency known for its political polls. (Source: 3)\n*   **@CNBC** - News outlet that provides business news and financial market coverage. (Source: 3)\n*   **@Tesla** - Official Tesla account, likely to post about company updates and related news. (Not Directly Found, but highly probable)\n*   **@SpaceX** - Official SpaceX account, likely to post about company updates and related news. (Not Directly Found, but highly probable)\n*   **@politico** - A news organization that focuses on politics and policy. (Source: 43)\n*   **@MotherJones** - A news organization that focuses on politics and policy. (Source: 15)\n\n**👤 INDIVIDUAL PROFESSIONALS:**\n\n*   **@stasstalksstocks** - Account related to stocks, stock market, and stock news. (Source: 5)\n*   **@cb_doge** - Account posting about the exchange between Musk and Trump. (Source: 9)\n*   **@RyanHansenSpace** - Account posting about SpaceX. (Source: 45)\n\n**📰 MEDIA/NEWS ACCOUNTS:**\n\n*   **@ccnreliablesources** - A place to find independent journalists writing for different publications and media. (Source: 3)\n\n**PLATFORM-SPECIFIC NOTES:**\n\n*   Meta has indicated that it will limit the amount of political content that users see on their feeds. (Source: 41)\n*   Threads is described as a text-based conversation app with real-time updates and public conversations. (Source: 7)\n*   Threads is a micro-blogging platform which is created around making healthy conversations with other threaders on various issues such as political discussions, news, and sport-related topics. (Source: 3)\n*   Meta partnered with influencers and celebrities to create excitement around the new app prior to its launch. (Source: 7)\n\n**ADDITIONAL NOTES:**\n\n*   Given the real-time nature of social media and the specific requirements of your request (active accounts, engagement, etc.), I recommend actively searching for relevant accounts on Threads using the keywords and hashtags you provided.\n*   Pay close attention to accounts that are actively discussing the Trump-Musk feud, its impact on Tesla's stock, and the potential for a third political party.\n*   Look for accounts that are sharing news articles, analysis, and commentary on these topics.\n*   Engage with popular posts and monitor trending hashtags to increase visibility and discover new accounts.\n\nI hope this is helpful!\n",
+      "total_found": 11
+    },
+    "seo_keywords": [
+      "breaking political news",
+      "political news",
+      "technology",
+      "campaign",
+      "democracy",
+      "political",
+      "latest in us",
+      "seoandpolitics",
+      "trends",
+      "analysis"
+    ]
+  },
+  "images": [
+    {
+      "entity_type": "person",
+      "entity_name": "Donald Trump",
+      "context": "President of the United States involved in a public feud with Elon Musk.",
+      "cloudinary_url": "https://res.cloudinary.com/dmz4lknv4/image/upload/v1749220245/d7ff1uvxgvxgbcsrzoqh.png",
+      "platform": "Instagram Threads",
+      "prompt_used": "Professional portrait of Donald Trump. A middle-aged man with distinctive hair, often seen in tailored suits, standing confidently at a podium with the presidential seal, gesturing emphatically while ...",
+      "success": true
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-06-06T20:02:05.555813",
+    "niche": "politics",
+    "original_article_length": 1921,
+    "fallback_used": false
+  },
+  "formatting_tips": {
+    "tone": "Keep it casual and conversational",
+    "length": "Under 500 characters works best",
+    "hashtags": "Use 2-4 relevant hashtags",
+    "engagement": "Encourage replies and shares with questions"
+  }
+}

@@ -1,0 +1,13 @@
+# Python cache and compiled files
+__pycache__/
+
+# Virtual environment
+venv/
+
+# Pretrained models directory
+pretrained_models/
+
+#outptu_dir
+output/
+
+.env

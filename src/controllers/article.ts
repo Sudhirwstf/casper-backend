@@ -339,6 +339,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import dbservices from "../services/dbservices";
 import { runPythonScript } from "../helper/articleImageHelper";
+import { runPythonScriptAudio } from "../helper/articleAudioHelper";
 
 // platform must be array of social media
 type Platform =
@@ -557,4 +558,52 @@ export default class articleController {
       return res.status(500).json({ error: err.message || 'Unexpected error.' });
     }
   };
+
+
+  //-------------------------------------Audio Generation controller------------------------------------//
+
+  static generateContentAudio=async (req:AuthenticateRequest,res:Response):Promise<any>=>{
+    
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Audio is required.' });
+    }
+    console.log('audio',req.file);
+    const audioFile=req.file.path;
+    const audiopath=path.resolve(audioFile);
+ 
+    console.log("audio",audiopath);
+
+    
+   
+
+    const sessionId:string =await runPythonScriptAudio(audioFile);
+    
+   
+
+    const audioFolder = path.join(__dirname, '../../output');
+
+    const audioFiles = await fs.readdir(audioFolder);
+    const matchedAudioFiles:any= audioFiles.filter(file => file.startsWith(sessionId) && file.endsWith('final_output.json'));
+
+    if(matchedAudioFiles.length===0){
+      return res.status(400).json({ status: false, message: "Failed to generate audio" });
+    }
+
+    const jsonPath = path.join(audioFolder, matchedAudioFiles[0]);
+    const audioContent = await fs.readFile(jsonPath, 'utf-8');
+    const audioData = JSON.parse(audioContent);
+
+    return res.status(200).json({ status: true, sessionId, audio: audioData, message: "Audio generated successfully" });
+   
+    
+
+
+    
+  } catch (error) {
+    console.error("Error occurred in generating Audio:", error);
+    res.status(500).json({ status: false, message: "Failed to generate audio" });
+    
+  }
+  }
 }

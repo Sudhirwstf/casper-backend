@@ -1,0 +1,93 @@
+{
+  "optimization_summary": {
+    "timestamp": "20250606_200205",
+    "platforms_processed": [
+      "medium",
+      "blogger",
+      "linkedin",
+      "x.com",
+      "facebook",
+      "instagram_threads"
+    ],
+    "total_platforms": 6,
+    "niche": "politics",
+    "total_images_generated": 8,
+    "successful_optimizations": 6,
+    "fallbacks_used": false
+  },
+  "cross_platform_data": {
+    "all_seo_keywords": [
+      "breaking political news",
+      "political news",
+      "technology",
+      "campaign",
+      "democracy",
+      "political",
+      "latest in us",
+      "seoandpolitics",
+      "trends",
+      "analysis"
+    ],
+    "all_hashtags": [
+      "#election",
+      "#usa",
+      "#tech",
+      "#trump",
+      "#news",
+      "#innovation",
+      "#technology",
+      "#business",
+      "#politics",
+      "#gadgets"
+    ],
+    "all_citations": [
+      "https://news.sky.com/story/donald-trump-disappointed-with-elon-musk-after-he-turned-on-his-big-beautiful-bill-13379714",
+      "https://thehill.com/policy/technology/5335453-elon-musk-donald-trump-jeffrey-epstein-files/",
+      "https://www.newsweek.com/donald-trump-epstein-files-what-we-know-2081811"
+    ]
+  },
+  "platform_comparison": {
+    "medium": {
+      "character_count": 3958,
+      "hashtag_count": 5,
+      "has_images": true,
+      "uses_citations": true,
+      "fallback_used": false
+    },
+    "blogger": {
+      "character_count": 4061,
+      "hashtag_count": 5,
+      "has_images": true,
+      "uses_citations": true,
+      "fallback_used": false
+    },
+    "linkedin": {
+      "character_count": 2941,
+      "hashtag_count": 5,
+      "has_images": true,
+      "uses_citations": false,
+      "fallback_used": false
+    },
+    "x.com": {
+      "character_count": 611,
+      "hashtag_count": 3,
+      "has_images": true,
+      "uses_citations": false,
+      "fallback_used": false
+    },
+    "facebook": {
+      "character_count": 1521,
+      "hashtag_count": 4,
+      "has_images": true,
+      "uses_citations": false,
+      "fallback_used": false
+    },
+    "instagram_threads": {
+      "character_count": 477,
+      "hashtag_count": 4,
+      "has_images": true,
+      "uses_citations": false,
+      "fallback_used": false
+    }
+  }
+}

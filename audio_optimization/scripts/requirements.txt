@@ -1,0 +1,23 @@
+# Core dependencies
+torch==2.0.1
+torchaudio==2.0.2
+
+# Whisper (OpenAI)
+git+https://github.com/openai/whisper.git
+
+# DeepFilterNet v2 (for real-time speech enhancement)
+deepfilternet
+
+# Audio processing
+ffmpeg-python==0.2.0
+pydub==0.25.1
+
+# Optional utilities
+numpy>=1.22
+scipy>=1.8
+tqdm>=4.64
+soundfile>=0.10.3
+
+cloudinary
+python-dotenv
+openai

@@ -102,3 +102,18 @@ Case 3: Both description and AI
   "styleChoice": "7",
   "colorChoice": "11"
 }
+
+
+
+
+//------------------audio controller
+
+command: python ./audio_optimization/scripts/main.py audio_optimization\scripts\data\audio1.wav
+
+
+take the uuid
+Run UUID: 157257d9-60ee-482f-9bc5-7bef300d8dd3
+
+
+take the output
+All done! Output saved to: output\157257d9-60ee-482f-9bc5-7bef300d8dd3_final_output.json

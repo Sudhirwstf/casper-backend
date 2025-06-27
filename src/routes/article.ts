@@ -138,7 +138,12 @@ const router=express.Router()
 
 router.post('/generate-article',authenticateUser, articleController.generateArticle);
 
+
+// Image generation with text
 router.post('/generate-image',upload.single('image'), articleController.generateContentImage);
+
+// Audio generation 
+router.post('/generate-audio',upload.single('audio'), articleController.generateContentAudio);
 
 
 
