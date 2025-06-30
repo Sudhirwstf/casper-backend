@@ -4,11 +4,8 @@ import axios from "axios";
 import dbservices from "../services/dbservices";
 import url from "node:url";
 
-import { OtpVerificationMethods } from "../enums";
-import { generateAuthTokens } from "../config/token";
 
-import jwt from 'jsonwebtoken'
-import logger from "../config/logger";
+
 
 
 

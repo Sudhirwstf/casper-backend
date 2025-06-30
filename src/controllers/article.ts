@@ -1,337 +1,3 @@
-// import { Request, Response } from "express";
-// import articleHelper from "../helper/articleGenerationHelper";
-
-// import fs from "fs/promises";
-
-
-// import path from "path";
-// import dbservices from "../services/dbservices";
-// import { ArticleServices } from "../services/dbservices/articles";
-// import ImageGenerationHelper from "../helper/ImageGeneration";
-// import { runPythonScript } from "../helper/articleImageHelper";
-
-// // platform must be array of social media
-// type Platform =
-//   | "facebook"
-//   | "twitter"
-//   | "linkedin"
-//   | "Threads"
-//   | "Instagram"
-//   | "x.com";
-
-// interface articleBody {
-//   userPrompt: string;
-//   platform: Platform[];
-//   isImageRequired: string[];
-//   compile: string;
-// }
-
-// interface AuthenticateRequest extends Request {
-//   user?: { userId: number | string }; 
-//   body:any
-//   file?:any
-// }
-// export default class articleController {
-
-//         //---------------------Article Generation Controller for Social media ---------------------//
-//       static generateArticle = async (req: Request,res: Response): Promise<void> => {
-
-//         const userId= req["user"]["userId"];
-//         if(!userId){
-//            res.status(401).send({status:false,message:"UNAUTHOURIZED USER"});
-//            return
-//         }
-
-//             const { userPrompt, platform, isImageRequired, compile }: articleBody =req.body;
-//               console.log(userPrompt, platform, isImageRequired, compile)
-
-//           try {
-
-//             if (!userPrompt) {
-//               res.status(400)
-//                 .send({ status: false, message: "Please Enter User Prompt" });
-//               return;
-//             }
-
-//             //if platform is not array
-
-//             if (!Array.isArray(platform) || platform.length === 0) {
-//               res
-//                 .status(400)
-//                 .send({ status: false, message: "Please enter at least one platform" });
-//               return;
-//             }
-
-//             const isFolderExist = fs.access("./UserFiles");
-//             if (!isFolderExist) {
-//               fs.mkdir("./UserFiles");
-//             }
-//             const uiqueFileName = Math.random().toString(36).substr(2, 8).toUpperCase();
-
-//             fs.writeFile(`./UserFiles/${uiqueFileName}.txt`, userPrompt);
-
-//             const filepath = `./UserFiles/${uiqueFileName}.txt`;
-
-//             console.log(filepath, platform, isImageRequired, compile);
-
-//             const generatedArticle = await articleHelper(
-//               filepath,
-//               platform.toString(),
-//               isImageRequired.toString(),
-//               compile
-//             );
-
-//             if (generatedArticle && generatedArticle.uuid) {
-//               const { jsonFiles, txtFiles } =await articleController.getFilesByUuid(
-//                 generatedArticle.uuid
-//               );
-//               console.log("JSON Files:", jsonFiles);
-//               console.log("TXT Files:", txtFiles);
-
-//       // read the json
-
-//       const jsonFileContents = jsonFiles.map((filePath) => {
-//         try {
-//           const content =  fs.readFile(filePath, "utf-8");
-//           return {
-//             filename: path.basename(filePath),
-//             content: content,
-//           };
-//         } catch (err) {
-//           console.error("Failed to read or parse JSON file:", filePath, err);
-//           return { filename: path.basename(filePath), content: null };
-//         }
-//       });
-
-//       const trimTxtContent =async (filePath: string):Promise< { filename: string; content: string | null } >=> {
-//         try {
-//           const raw =await fs.readFile(filePath, "utf-8");
-//           const lines = raw.split("\n");
-
-//           const firstDividerIndex = lines.findIndex(
-//             (line) =>
-//               line.trim() ===
-//               "=================================================="
-//           );
-//           const secondDividerIndex = lines.findIndex(
-//             (line, i) =>
-//               i > firstDividerIndex &&
-//               line.trim() ===
-//                 "=================================================="
-//           );
-
-//           let content = null;
-//           if (firstDividerIndex !== -1 && secondDividerIndex !== -1) {
-//             const sliced = lines.slice(
-//               firstDividerIndex + 1,
-//               secondDividerIndex
-//             );
-//             content = sliced.join("\n").trim(); // final trimmed content
-//           }
-
-//           return {
-//             filename: path.basename(filePath),
-//             content,
-//           };
-//         } catch (err) {
-//           console.error("Error reading or trimming file:", filePath, err);
-//           return {
-//             filename: path.basename(filePath),
-//             content: null,
-//           };
-//         }
-//       };
-
-//       const textFiles = txtFiles.map(trimTxtContent);
-
-//       console.log("textFiles", textFiles);
-
-//       // remove file uiqueFileName
-
-//       fs.unlink(`./UserFiles/${uiqueFileName}.txt`);
-
-//       //remove all files which starts with uuid in shared_optimization_results
-
-//       const optimizationDir = path.resolve("shared_optimization_results");
-      
-//       if (fs.access(optimizationDir)) {
-//         const allFiles =await fs.readdir(optimizationDir);
-//         for (const file of allFiles) {
-//           if (file.startsWith(generatedArticle.uuid)) {
-//             fs.unlink(path.join(optimizationDir, file));
-//           }
-//         }
-//       }
-
-
-//       console.log("text file before", textFiles);
-
-//       const {success,remainingCredits} = await dbservices.ArticleServices.saveArticles(
-//         textFiles,
-//         +userId
-//       );
-
-//       console.log("saveArticles", success, remainingCredits);
-
-//       if (success) {
-//         res.json({
-//           status: true,
-//           message: "Article Generated Successfully",
-//           credits: remainingCredits,
-//           jsonFileContents,
-//           textFiles,
-//         });
-//       }
-//     }
-    
-//    } catch (error) {
-//     res.status(500).json({ status: false, message: error });
-//     console.error("Error:", error);
-    
-//    }
-//   };
-
-//    static getFilesByUuid =async(uuid: string): Promise<{ jsonFiles:any; txtFiles: any }> => {
-//     const optimizationDir = path.resolve("shared_optimization_results");
-
-//     const jsonFiles: string[] = [];
-//     const txtFiles: string[] = [];
-
-//     // Check for JSON optimization files
-//     if (fs.access(optimizationDir)) {
-//       const allFiles =await fs.readdir(optimizationDir);
-//       for (const file of allFiles) {
-//         if (
-//           file.startsWith(uuid) &&
-//           file.includes("optimization") &&
-//           file.endsWith(".json")
-//         ) {
-//           jsonFiles.push(path.join(optimizationDir, file));
-//         }
-//       }
-//     }
-
-//     // Check for TXT files
-//     if (fs.access(optimizationDir)) {
-//       const allFiles =await fs.readdir(optimizationDir);
-//       for (const file of allFiles) {
-//         if (
-//           file.startsWith(uuid) &&
-//           file.endsWith(".txt") &&
-//           file.includes("readable")
-//         ) {
-//           txtFiles.push(path.join(optimizationDir, file));
-//         }
-//       }
-//     }
-
-//     return { jsonFiles, txtFiles };
-//   }
-
-
-//           //----------------Image Generation controller-----------------------------//
-
-
-
-
-
-
-//  static generateContentImage = async (req: AuthenticateRequest, res: Response):Promise<any> => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ error: 'Photo is required.' });
-//     }
-
-//     const {platforms,description,useAI,styleChoice,colorChoice,} = req.body;
-
-//     if (!platforms) {
-//       return res.status(400).json({ error: 'Platforms are required.' });
-//     }
-
-//     const styleNum = parseInt(styleChoice);
-//     const colorNum = parseInt(colorChoice);
-
-//     if (isNaN(styleNum) || styleNum < 1 || styleNum > 7) {
-//       return res.status(400).json({ error: 'Invalid style choice (1-7).' });
-//     }
-
-//     if (styleNum === 7 && (isNaN(colorNum) || colorNum < 1 || colorNum > 15)) {
-//       return res.status(400).json({ error: 'Invalid color choice (1-15).' });
-//     }
-
-//     const photoPath = path.resolve(req.file.path)
-
-//     const sessionId = await runPythonScript({
-//      photoPath,
-//       platforms: platforms.split(','),
-//       description,
-//       useAI: useAI === 'true',
-//       styleChoice: styleNum,
-//       colorChoice: styleNum === 7 ? colorNum : undefined,
-//     });
-
-//     // console.log('sessionId:', sessionId);
-
-   
-    
-
-//      // Folder paths
-//     const txtFolder = path.join(__dirname, '../../social_media_output/compiled_captions');
-//     const jsonFolder = path.join(__dirname, '../../social_media_output/json_results');
-
-//      //  Read all TXT files starting with UUID
-//     const txtFiles:any = await fs.readdir(txtFolder);
-
-//     console.log("txtFiles",txtFiles)
-
-//     const matchedTxtFiles = txtFiles.filter((file) => file.startsWith(sessionId) && file.endsWith('.txt'));
-//     console.log("matchedTxtFiles",matchedTxtFiles)
-
-    
-//     const txtContents: Record<string, string> = {};
-//     for (const file of matchedTxtFiles) {
-//     const fullPath = path.join(txtFolder, file);
-//     const content:any = await fs.readFile(fullPath, 'utf-8');
-//       txtContents[file] = content;
-//     }
-
-//     console.log("txtContents",txtContents)
-
-//     // 2. Read JSON file that starts with uuid + "_combined_final_data_"
-//     const jsonFiles:any = await fs.readdir(jsonFolder);
-//     const jsonMatch = jsonFiles.find((file) =>
-//       file.startsWith(`${sessionId}_combined_final_data_`) && file.endsWith('.json')
-//     );
-
-//     let jsonData: any = null;
-//     if (jsonMatch) {
-//       const jsonPath = path.join(jsonFolder, jsonMatch);
-//       const jsonContent:any = await fs.readFile(jsonPath, 'utf-8');
-//       jsonData = JSON.parse(jsonContent);
-//     }
-
-
-//       return res.json({
-//       success: true,
-//       sessionId,
-//       captions: txtContents,
-//       json: jsonData,
-//     });
-
-//   } catch (err: any) {
-//       console.error('Controller error:', err);
-//       return res.status(500).json({ error: err.message || 'Unexpected error.' });
-//   }
-// };
-
-
-  
-// }
-
-
-
-
-
 
 import { Request, Response } from "express";
 import articleHelper from "../helper/articleGenerationHelper";
@@ -367,6 +33,8 @@ export default class articleController {
   static generateArticle = async (req: AuthenticateRequest, res: Response): Promise<void> => {
     try {
       const userId = req.user?.userId;
+      
+
       console.log('userId',userId)
       if (!userId) {
         res.status(401).send({ status: false, message: "UNAUTHORIZED USER" });
@@ -489,6 +157,9 @@ export default class articleController {
     return { jsonFiles, txtFiles };
   };
 
+
+  //------------------------------Generate Content Image------------------------------//
+
   static generateContentImage = async (req: AuthenticateRequest, res: Response): Promise<any> => {
     try {
       if (!req.file) {
@@ -523,6 +194,9 @@ export default class articleController {
         colorChoice: styleNum === 7 ? colorNum : undefined,
       });
 
+      //delte photot from uplaods folder
+      await fs.unlink(photoPath);
+
       const txtFolder = path.join(__dirname, '../../social_media_output/compiled_captions');
       const jsonFolder = path.join(__dirname, '../../social_media_output/json_results');
 
@@ -534,6 +208,9 @@ export default class articleController {
         const fullPath = path.join(txtFolder, file);
         const content = await fs.readFile(fullPath, 'utf-8');
         txtContents[file] = content;
+
+        // delete txt file
+        await fs.unlink(fullPath);
       }
 
       const jsonFiles = await fs.readdir(jsonFolder);
@@ -544,6 +221,9 @@ export default class articleController {
         const jsonPath = path.join(jsonFolder, jsonMatch);
         const jsonContent = await fs.readFile(jsonPath, 'utf-8');
         jsonData = JSON.parse(jsonContent);
+
+        // delete json file
+        await fs.unlink(jsonPath);
       }
 
       return res.json({
@@ -575,9 +255,10 @@ export default class articleController {
     console.log("audio",audiopath);
 
     
-   
+  
 
     const sessionId:string =await runPythonScriptAudio(audioFile);
+    
     
    
 
@@ -594,9 +275,15 @@ export default class articleController {
     const audioContent = await fs.readFile(jsonPath, 'utf-8');
     const audioData = JSON.parse(audioContent);
 
+
+
+     // delte audio from uploads and output folder
+    await fs.unlink(audiopath);
+    await fs.unlink(jsonPath);
+
     return res.status(200).json({ status: true, sessionId, audio: audioData, message: "Audio generated successfully" });
    
-    
+   
 
 
     
