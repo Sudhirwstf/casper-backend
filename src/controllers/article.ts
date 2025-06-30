@@ -10,10 +10,10 @@ import { runPythonScriptAudio } from "../helper/articleAudioHelper";
 // platform must be array of social media
 type Platform =
   | "facebook"
-  | "twitter"
+  | "blogger"
   | "linkedin"
-  | "Threads"
-  | "Instagram"
+  | "medium"
+  | "instagram_threads"
   | "x.com";
 
 interface articleBody {
@@ -58,16 +58,30 @@ export default class articleController {
         await fs.mkdir("./UserFiles");
       }
 
+   
+
       const uniqueFileName = Math.random().toString(36).substr(2, 8).toUpperCase();
       const filePath = `./UserFiles/${uniqueFileName}.txt`;
       await fs.writeFile(filePath, userPrompt);
+
+         console.log(filePath,
+        platform.toString(),
+        isImageRequired.toString(),
+        compile.toLocaleLowerCase())
+      
+     
 
       const generatedArticle = await articleHelper(
         filePath,
         platform.toString(),
         isImageRequired.toString(),
-        compile
+        compile.toLocaleLowerCase()
       );
+
+      if(!generatedArticle){
+        res.status(400).send({ status: false, message: "Article generation failed" });
+        return;
+      }
 
       if (generatedArticle?.uuid) {
         const { jsonFiles, txtFiles } = await articleController.getFilesByUuid(generatedArticle.uuid);
@@ -162,6 +176,12 @@ export default class articleController {
 
   static generateContentImage = async (req: AuthenticateRequest, res: Response): Promise<any> => {
     try {
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized user.' });
+      } 
+
       if (!req.file) {
         return res.status(400).json({ error: 'Photo is required.' });
       }

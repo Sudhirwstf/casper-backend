@@ -8,6 +8,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs'
 import multer from 'multer';
+import { articleValidator } from "../validators/articleValidator";
 
 
 
@@ -136,14 +137,14 @@ const router=express.Router()
  *                   example: Internal Server Error
  */
 
-router.post('/generate-article',authenticateUser, articleController.generateArticle);
+router.post('/generate-article',authenticateUser,validateRequest(articleValidator.textGenerationValidator), articleController.generateArticle);
 
 
 // Image generation with text
-router.post('/generate-image',upload.single('image'), articleController.generateContentImage);
+router.post('/generate-image',upload.single('image'),authenticateUser,articleController.generateContentImage);
 
 // Audio generation 
-router.post('/generate-audio',upload.single('audio'), articleController.generateContentAudio);
+router.post('/generate-audio',upload.single('audio'),authenticateUser,articleController.generateContentAudio);
 
 
 

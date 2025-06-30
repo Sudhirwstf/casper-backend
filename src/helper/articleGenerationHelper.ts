@@ -51,6 +51,9 @@ function articleHelper(
 
     python.on("close", (code) => {
       console.log(`child process exited with code ${code}`);
+      if(code==1){
+        resolve(null);
+      }
       // If process ends but no file found, return null
       if (!uuid) {
         resolve(null);
