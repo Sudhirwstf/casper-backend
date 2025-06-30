@@ -27,15 +27,15 @@ const storage = multer.diskStorage({
 
 export const upload = multer({ storage });
 
-const router=express.Router()
-
-/**
+const router=express.Router()/**
  * @swagger
  * /article/generate-article:
  *   post:
  *     summary: Generate articles for selected social media platforms
  *     tags:
  *       - Article
+ *     security:
+ *       - bearerAuth: []  # Requires Bearer token via Authorize button
  *     requestBody:
  *       required: true
  *       content:
@@ -54,17 +54,19 @@ const router=express.Router()
  *                 example: "future opportunities in data science"
  *               platform:
  *                 type: array
- *                 description: List of social media platforms (comma-separated strings)
+ *                 description: List of social media platforms
  *                 items:
  *                   type: string
- *                   example: ["x.com","linkedin"]
- *                   
+ *                 example:
+ *                   - x.com
+ *                   - linkedin
  *               isImageRequired:
  *                 type: array
- *                 description: Platforms where images are required (comma-separated strings)
+ *                 description: Platforms where images are required
  *                 items:
  *                   type: string
- *                   example: "x.com"
+ *                 example:
+ *                   - x.com
  *               compile:
  *                 type: string
  *                 enum: [yes, no]
@@ -97,7 +99,6 @@ const router=express.Router()
  *                         example: article_x_com.json
  *                       content:
  *                         type: object
- *                         description: Parsed JSON content
  *                 textFiles:
  *                   type: array
  *                   items:
@@ -108,7 +109,6 @@ const router=express.Router()
  *                         example: article_x_com.txt
  *                       content:
  *                         type: string
- *                         description: Trimmed article text content
  *       400:
  *         description: Missing or invalid input parameters
  *         content:
@@ -136,6 +136,7 @@ const router=express.Router()
  *                   type: string
  *                   example: Internal Server Error
  */
+
 
 router.post('/generate-article',authenticateUser,validateRequest(articleValidator.textGenerationValidator), articleController.generateArticle);
 

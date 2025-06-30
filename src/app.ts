@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "*"}));
 passport.use('jwt', jwtStrategy);
 
+
 app.use("/", router);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
