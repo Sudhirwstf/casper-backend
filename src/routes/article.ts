@@ -254,7 +254,7 @@ router.post('/generate-article',authenticateUser,validateRequest(articleValidato
 router.post('/generate-image',upload.single('image'),authenticateUser,validateRequest(articleValidator.generateImageValidator),articleController.generateContentImage);
 
 // Audio generation 
-router.post('/generate-audio',upload.single('audio'),authenticateUser,articleController.generateContentAudio);
+router.post('/generate-audio',upload.single('audio'),articleController.generateContentAudio);
 
 
 

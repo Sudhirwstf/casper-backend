@@ -305,13 +305,17 @@ export default class articleController {
 
     const sessionId:string =await runPythonScriptAudio(audioFile);
     
-    
+    console.log('Id of session',sessionId);
+    if(!sessionId){
+      return res.status(400).json({ status: false, message: "Failed to generate audio" });
+    }
    
 
-    const audioFolder = path.join(__dirname, '../../output');
+    const audioFolder = path.join(process.cwd(), 'output');
 
-    const audioFiles = await fs.readdir(audioFolder);
-    const matchedAudioFiles:any= audioFiles.filter(file => file.startsWith(sessionId) && file.endsWith('final_output.json'));
+
+   const audioFiles = await fs.readdir(audioFolder);
+   const matchedAudioFiles:any= audioFiles.filter(file => file.startsWith(sessionId) && file.endsWith('final_output.json'));
 
     if(matchedAudioFiles.length===0){
       return res.status(400).json({ status: false, message: "Failed to generate audio" });
@@ -325,7 +329,14 @@ export default class articleController {
 
      // delte audio from uploads and output folder
     await fs.unlink(audiopath);
-    await fs.unlink(jsonPath);
+  
+
+    //delte all the files starting with session id
+    const audioFilesToDelete = audioFiles.filter(file => file.startsWith(sessionId));
+    for (const file of audioFilesToDelete) {
+      const filePath = path.join(audioFolder, file);
+      await fs.unlink(filePath);
+    }
 
     return res.status(200).json({ status: true, sessionId, audio: audioData, message: "Audio generated successfully" });
    
