@@ -133,7 +133,7 @@ export default class articleController {
         const { success, remainingCredits } = await dbservices.ArticleServices.saveArticles(textFiles, +userId);
 
         if (success) {
-          res.json({
+          res.status(200).json({
             status: true,
             message: "Article Generated Successfully",
             credits: remainingCredits,
@@ -186,6 +186,14 @@ export default class articleController {
         return res.status(400).json({ error: 'Photo is required.' });
       }
 
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg' ];
+
+    if (!validImageTypes.includes(req.file.mimetype)) {
+      // Delete invalid file if needed
+      await fs.unlink(req.file.path);
+      return res.status(400).json({ error: 'Invalid file type. Only image files are allowed (jpeg, png, webp, gif).' });
+    }
+
       const { platforms, description, useAI, styleChoice, colorChoice } = req.body;
 
       if (!platforms) {
@@ -203,7 +211,21 @@ export default class articleController {
         return res.status(400).json({ error: 'Invalid color choice (1-15).' });
       }
 
+
+      console.log('platforms:', platforms);
+     
       const photoPath = path.resolve(req.file.path);
+      console.log({
+        photoPath,
+        platforms: platforms.split(',').map(platform => platform.trim()),
+        description,
+        useAI: useAI === 'true',
+        styleChoice: styleNum,
+        colorChoice: styleNum === 7 ? colorNum : undefined
+      })
+
+      
+      
 
       const sessionId = await runPythonScript({
         photoPath,
@@ -213,6 +235,10 @@ export default class articleController {
         styleChoice: styleNum,
         colorChoice: styleNum === 7 ? colorNum : undefined,
       });
+
+      if (!sessionId) {
+        return res.status(500).json({ error: 'Failed to generate content image.' });
+      }
 
       //delte photot from uplaods folder
       await fs.unlink(photoPath);
@@ -246,7 +272,7 @@ export default class articleController {
         await fs.unlink(jsonPath);
       }
 
-      return res.json({
+      return res.status(200).json({
         success: true,
         sessionId,
         captions: txtContents,

@@ -27,7 +27,8 @@ const storage = multer.diskStorage({
 
 export const upload = multer({ storage });
 
-const router=express.Router()/**
+const router=express.Router()
+/**
  * @swagger
  * /article/generate-article:
  *   post:
@@ -141,8 +142,116 @@ const router=express.Router()/**
 router.post('/generate-article',authenticateUser,validateRequest(articleValidator.textGenerationValidator), articleController.generateArticle);
 
 
+
+
+/**
+ * @swagger
+ * /article/generate-image:
+ *   post:
+ *     summary: Generate content image and captions for selected social media platforms
+ *     tags:
+ *       - Image
+ *     security:
+ *       - bearerAuth: []  # Requires Bearer token via Authorize button
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - image
+ *               - platforms
+ *               - description
+ *               - useAI
+ *               - styleChoice
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image file to upload (only image/* types are accepted)
+ *               platforms:
+ *                 type: string
+ *                 description: Comma-separated list of target platforms
+ *                 example: instagram,twitter
+ *               description:
+ *                 type: string
+ *                 description: Description for the image
+ *                 example: "Promotional banner for our AI tool"
+ *               useAI:
+ *                 type: string
+ *                 enum: [true, false]
+ *                 description: Whether to use AI for content generation
+ *                 example: "true"
+ *               styleChoice:
+ *                 type: integer
+ *                 minimum: 1
+ *                 maximum: 7
+ *                 description: Style preset number (1 to 7)
+ *                 example: 3
+ *               colorChoice:
+ *                 type: integer
+ *                 minimum: 1
+ *                 maximum: 15
+ *                 description: Required only when styleChoice is 7
+ *                 example: 4
+ *     responses:
+ *       200:
+ *         description: Content image and captions generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 sessionId:
+ *                   type: string
+ *                   example: "abc123-session"
+ *                 captions:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *                   example:
+ *                     abc123_instagram.txt: "Generated caption for Instagram"
+ *                 json:
+ *                   type: object
+ *                   description: Final combined JSON output
+ *       400:
+ *         description: Missing or invalid input parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Platforms are required.
+ *       401:
+ *         description: Unauthorized - User not logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unauthorized user.
+ *       500:
+ *         description: Internal server error during image generation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to generate content image.
+ */
+
 // Image generation with text
-router.post('/generate-image',upload.single('image'),authenticateUser,articleController.generateContentImage);
+router.post('/generate-image',upload.single('image'),authenticateUser,validateRequest(articleValidator.generateImageValidator),articleController.generateContentImage);
 
 // Audio generation 
 router.post('/generate-audio',upload.single('audio'),authenticateUser,articleController.generateContentAudio);
