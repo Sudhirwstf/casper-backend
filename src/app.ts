@@ -2,6 +2,7 @@ import express from "express";
 import router from "./routes";
 import cors from "cors"
 import passport from "passport";
+import multer from "multer";
 
 import { jwtStrategy } from "./config/token";
 import { envConfigs } from "./config/envconfig";
@@ -15,11 +16,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({ origin: "*"}));
+
+// app.use((err, req, res, next) => {
+//   if (err instanceof multer.MulterError) {
+//     return res.status(400).json({ error: err.errors[0].error });
+//   }
+//   next(err);
+// });
+ 
 passport.use('jwt', jwtStrategy);
 
 
 app.use("/", router);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 
 app.get('/', (req, res) => {
   res.send("Server is running")

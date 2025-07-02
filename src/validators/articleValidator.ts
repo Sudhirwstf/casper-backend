@@ -107,4 +107,13 @@ export class articleValidator {
   });
 
 
+  static audioValidator = z.object({
+    body: z.object({
+     
+    })
+    .strict(),
+    params: z.object({}).strict(),
+    query: z.object({}).strict(),
+  });
+
 }

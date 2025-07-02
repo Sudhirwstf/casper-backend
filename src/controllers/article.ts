@@ -189,9 +189,9 @@ export default class articleController {
         const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg' ];
 
     if (!validImageTypes.includes(req.file.mimetype)) {
-      // Delete invalid file if needed
+      // Delete invalid file 
       await fs.unlink(req.file.path);
-      return res.status(400).json({ error: 'Invalid file type. Only image files are allowed (jpeg, png, webp, gif).' });
+      return res.status(400).json({ error: 'Invalid file type. Only image files are allowed (jpeg, png, webp, jpg).' });
     }
 
       const { platforms, description, useAI, styleChoice, colorChoice } = req.body;
@@ -294,12 +294,20 @@ export default class articleController {
     if (!req.file) {
       return res.status(400).json({ error: 'Audio is required.' });
     }
+    
+
+    const audioFilleAllowed=['audio/mpeg','audio/wav','audio/ogg','audio/mp3','audio/wave'];
+    if(!audioFilleAllowed.includes(req.file.mimetype)){
+      fs.unlink(req.file.path);
+      return res.status(400).json({ error: 'Invalid file type. Only audio files are allowed (mpeg, wav, ogg, mp3, wave).' });
+    }
     console.log('audio',req.file);
     const audioFile=req.file.path;
     const audiopath=path.resolve(audioFile);
  
     console.log("audio",audiopath);
 
+   
     
   
 

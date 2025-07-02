@@ -25,6 +25,7 @@ const storage = multer.diskStorage({
   },
 });
 
+
 export const upload = multer({ storage });
 
 const router=express.Router()
@@ -150,7 +151,7 @@ router.post('/generate-article',authenticateUser,validateRequest(articleValidato
  *   post:
  *     summary: Generate content image and captions for selected social media platforms
  *     tags:
- *       - Image
+ *       - Article
  *     security:
  *       - bearerAuth: []  # Requires Bearer token via Authorize button
  *     requestBody:
@@ -252,9 +253,104 @@ router.post('/generate-article',authenticateUser,validateRequest(articleValidato
 
 // Image generation with text
 router.post('/generate-image',upload.single('image'),authenticateUser,validateRequest(articleValidator.generateImageValidator),articleController.generateContentImage);
+/**
+ * @swagger
+ * /article/generate-audio:
+ *   post:
+ *     summary: Upload an audio file and generate enhanced podcast/audio content.
+ *     tags:
+ *       - Article
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - audio
+ *             properties:
+ *               audio:
+ *                 type: string
+ *                 format: binary
+ *                 description: >
+ *                   Audio file to be processed. Supported formats:
+ *                   mpeg, wav, ogg, mp3, wave.
+ *     responses:
+ *       200:
+ *         description: Audio generated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 sessionId:
+ *                   type: string
+ *                   example: "90d8de96-5d8a-4b86-a39e-9d71cf05fec4"
+ *                 audio:
+ *                   type: object
+ *                   properties:
+ *                     enhanced_8ea5849d-4f2f-4ff9-91c6-b42a692dcfaf:
+ *                       type: object
+ *                       properties:
+ *                         uuid:
+ *                           type: string
+ *                           example: "2c3390f7-0461-4992-927f-d6f730e2a518"
+ *                         url:
+ *                           type: string
+ *                           format: uri
+ *                           example: "https://res.cloudinary.com/dmz4lknv4/video/upload/v1751031498/enhanced_audio/fasyfdusycwasfbqcvwd.wav"
+ *                         transcript_uuid:
+ *                           type: string
+ *                           example: "34723a8d-83ef-424a-b907-849e2bb7bdbc"
+ *                         apple_podcast_title:
+ *                           type: string
+ *                           example: "Midwest Heart Connection Chat"
+ *                         apple_podcast_desc:
+ *                           type: string
+ *                           example: "Join us as we check in midway with the boys from the Midwest Heart Connection. We discuss their current state, the weather in Nebraska, and their love for rain over sunshine."
+ *                         spotify_title:
+ *                           type: string
+ *                           example: "Midwest Heart Connection: A Journey Through Nebraska"
+ *                         spotify_desc:
+ *                           type: string
+ *                           example: "Join us as we traverse the great state of Nebraska on 'Midwest Heart Connection'. We're midway through our journey, the weather's wild, but our spirits are high. Rain or shine, we're taking on the Midwest with smiles on our faces. Tune in to our podcast for heartwarming stories, thrilling adventures, and a genuine exploration of America's heartland. Click here to journey with us: https://spoti.fi/MidwestHeartConnection"
+ *                 message:
+ *                   type: string
+ *                   example: "Audio generated successfully"
+ *       400:
+ *         description: Invalid request. Audio file missing or unsupported format.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid file type. Only audio files are allowed (mpeg, wav, ogg, mp3, wave)."
+ *       500:
+ *         description: Server error during audio generation.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to generate audio"
+ */
+
+
 
 // Audio generation 
-router.post('/generate-audio',upload.single('audio'),articleController.generateContentAudio);
+router.post('/generate-audio',upload.single('audio'),authenticateUser,articleController.generateContentAudio);
 
 
 
