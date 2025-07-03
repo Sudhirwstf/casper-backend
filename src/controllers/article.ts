@@ -179,6 +179,7 @@ export default class articleController {
       const userId = req.user?.userId;
 
       if (!userId) {
+       
         return res.status(401).json({ error: 'Unauthorized user.' });
       } 
 
@@ -197,6 +198,7 @@ export default class articleController {
       const { platforms, description, useAI, styleChoice, colorChoice } = req.body;
 
       if (!platforms) {
+         await fs.unlink(req.file.path);
         return res.status(400).json({ error: 'Platforms are required.' });
       }
 
@@ -204,10 +206,12 @@ export default class articleController {
       const colorNum = parseInt(colorChoice);
 
       if (isNaN(styleNum) || styleNum < 1 || styleNum > 7) {
+         await fs.unlink(req.file.path);
         return res.status(400).json({ error: 'Invalid style choice (1-7).' });
       }
 
       if (styleNum === 7 && (isNaN(colorNum) || colorNum < 1 || colorNum > 15)) {
+         await fs.unlink(req.file.path);
         return res.status(400).json({ error: 'Invalid color choice (1-15).' });
       }
 

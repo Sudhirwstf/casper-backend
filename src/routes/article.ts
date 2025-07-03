@@ -4,29 +4,17 @@ import validators from "../validators";
 import { authenticateUser, validateRequest } from "../middleware";
 import articleController from "../controllers/article";
 import { auth } from "../controllers/auth";
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import fs from 'fs'
+
+
 import multer from 'multer';
 import { articleValidator } from "../validators/articleValidator";
+import { multerHandler, uploadAudio, uploadImage } from "../helper/multer";
 
 
 
 
-const uploadDir=fs.existsSync("uploads")?"uploads":fs.mkdirSync("uploads");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
-  },
-});
 
 
-export const upload = multer({ storage });
 
 const router=express.Router()
 /**
@@ -252,7 +240,7 @@ router.post('/generate-article',authenticateUser,validateRequest(articleValidato
  */
 
 // Image generation with text
-router.post('/generate-image',upload.single('image'),authenticateUser,validateRequest(articleValidator.generateImageValidator),articleController.generateContentImage);
+router.post('/generate-image',multerHandler(uploadImage.single('image')),authenticateUser,validateRequest(articleValidator.generateImageValidator),articleController.generateContentImage);
 /**
  * @swagger
  * /article/generate-audio:
@@ -350,7 +338,7 @@ router.post('/generate-image',upload.single('image'),authenticateUser,validateRe
 
 
 // Audio generation 
-router.post('/generate-audio',upload.single('audio'),authenticateUser,articleController.generateContentAudio);
+router.post('/generate-audio',multerHandler(uploadAudio.single('audio')),authenticateUser,validateRequest(articleValidator.audioValidator),articleController.generateContentAudio);
 
 
 

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AnyZodObject, z, ZodError } from "zod";
+import fs from "fs";
 // import { getUser } from "../config/jwt";
 import passport from 'passport';
 
@@ -64,6 +65,11 @@ export const validateRequest =
       req.params = sanitizedValues.params;
       return next();
     } catch (error) {
+
+      if (req.file?.path && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+
       const validationErrors: { [key: string]: string } = {};
 
       (error as ZodError).errors.forEach((errorMessage) => {

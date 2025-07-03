@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response } from "express";
 import router from "./routes";
 import cors from "cors"
 import passport from "passport";
@@ -17,13 +17,22 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({ origin: "*"}));
 
-// app.use((err, req, res, next) => {
-//   if (err instanceof multer.MulterError) {
-//     return res.status(400).json({ error: err.errors[0].error });
-//   }
-//   next(err);
-// });
- 
+// Global error handler for multer and other errors
+app.use((err: any, req, res, next) => {
+  if (err instanceof multer.MulterError || err.statusCode) {
+    return res.status(err.statusCode || 400).json({
+      status: false,
+      error: err.message || "File upload error",
+    });
+  }
+
+  // Handle unexpected errors
+  return res.status(500).json({
+    status: false,
+    error: "Internal server error",
+  });
+});
+
 passport.use('jwt', jwtStrategy);
 
 
