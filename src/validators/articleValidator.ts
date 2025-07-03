@@ -116,7 +116,7 @@ export class articleValidator {
 
   static videoContentValidator = z.object({
     body: z.object({
-      platforms:z.object({
+      
         platforms: z
         .string({ required_error: "platforms is required" })
         .refine(
@@ -128,7 +128,7 @@ export class articleValidator {
             message: `Invalid platform value. Must be one of: ${videoPlatformValues.join(", ")}`,
           }
         ),
-      })
+  
      
     })
     .strict(),

@@ -248,6 +248,8 @@ router.post('/generate-image',multerHandler(uploadImage.single('image')),authent
  *     summary: Upload an audio file and generate enhanced podcast/audio content.
  *     tags:
  *       - Article
+ *      security:
+ *       - bearerAuth: []  # Requires Bearer token via Authorize button
  *     consumes:
  *       - multipart/form-data
  *     requestBody:
@@ -346,40 +348,66 @@ router.post('/generate-audio',multerHandler(uploadAudio.single('audio')),authent
  * @swagger
  * /article/generate-video:
  *   post:
- *     summary: Generate platform videos and download as ZIP
+ *     summary: Upload a video and generate platform-specific enhanced versions
+ *     description: |
+ *       Upload a video file and select one or more platforms (e.g., Instagram, LinkedIn, YouTube).
+ *       The server will process the video, generate versions for each selected platform,
+ *       and return them bundled in a `ZIP file`.
  *     tags:
  *       - Article
+ *     security:
+ *       - bearerAuth: []  # Requires Bearer token via Authorize button
+ *     consumes:
+ *       - multipart/form-data
+ *     produces:
+ *       - application/zip
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - video
+ *               - platforms
  *             properties:
  *               video:
  *                 type: string
- *                 example: "aaa1.mp4"
+ *                 format: binary
+ *                 description: The video file to upload
  *               platforms:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["instagram", "youtube"]
+ *                 type: string
+ *                 description: Comma-separated platform names (e.g., "instagram,linkedin,youtube")
+ *                 example: "instagram,linkedin,youtube"
  *     responses:
  *       200:
- *         description: ZIP file containing platform videos
+ *         description: Zip file containing generated platform videos
  *         content:
  *           application/zip:
  *             schema:
  *               type: string
  *               format: binary
  *       400:
- *         description: Video generation failed
+ *         description: Bad request (e.g. missing video or platforms)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to generate video"
  *       500:
  *         description: Internal server error
  */
 
 
+
 // video generation
-router.post('/generate-video',multerHandler(uploadVideo.single('video')),authenticateUser,validateRequest(articleValidator.videoContentValidator),articleController.generateContentVideo);
+router.post('/generate-video',multerHandler(uploadVideo.single('video')),validateRequest(articleValidator.videoContentValidator),authenticateUser,articleController.generateContentVideo);
 
 export default router
+
