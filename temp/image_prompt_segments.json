@@ -1,0 +1,20 @@
+[
+  {
+    "start": 8.0,
+    "end": 12.0,
+    "prompt": "A futuristic room with a person wearing a virtual reality headset, surrounded by holographic screens displaying a timeline of video game evolution, from the simple graphics of Pong to advanced photorealistic 3D worlds, illustrating the concept of reality as an advanced simulation.",
+    "image_path": "temp\\images\\gap_0.png"
+  },
+  {
+    "start": 14.765,
+    "end": 18.227,
+    "prompt": "A retro scene depicting a vintage arcade setting with an old-school television displaying the classic game Pong, featuring two simple white rectangles on opposite sides of the screen and a small square dot moving between them, set against a colorful 1980s backdrop with other arcade machines and vibrant neon lights.",
+    "image_path": "temp\\images\\gap_1.png"
+  },
+  {
+    "start": 18.227,
+    "end": 22.227,
+    "prompt": "An image of a retro gaming setup featuring an old television screen displaying the classic game Pong, with its distinctive black background and simple white graphics consisting of two vertical rectangles representing paddles and a small square dot as the ball, accompanied by a vintage game console and joystick controller from the 1970s.",
+    "image_path": "temp\\images\\gap_2.png"
+  }
+]

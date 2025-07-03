@@ -1,10 +1,8 @@
-
-
-import { param } from "drizzle-orm";
 import { z } from "zod";
 
 const PlatformValues = ["facebook", "linkedin", "instagram_threads","x.com","medium","blogger"] as const;
 const ImagePlatformValues = ["facebook", "linkedin", "instagram","x.com","pinterest"] as const;
+const videoPlatformValues = ["youtube","instagram","linkedin"] as const;
 
 
 
@@ -109,6 +107,28 @@ export class articleValidator {
 
   static audioValidator = z.object({
     body: z.object({
+     
+    })
+    .strict(),
+    params: z.object({}).strict(),
+    query: z.object({}).strict(),
+  });
+
+  static videoContentValidator = z.object({
+    body: z.object({
+      platforms:z.object({
+        platforms: z
+        .string({ required_error: "platforms is required" })
+        .refine(
+          (val) => {
+            const values = val.split(',').map((v) => v.trim().toLowerCase());
+            return values.every((v) => videoPlatformValues.includes(v as any));
+          },
+          {
+            message: `Invalid platform value. Must be one of: ${videoPlatformValues.join(", ")}`,
+          }
+        ),
+      })
      
     })
     .strict(),

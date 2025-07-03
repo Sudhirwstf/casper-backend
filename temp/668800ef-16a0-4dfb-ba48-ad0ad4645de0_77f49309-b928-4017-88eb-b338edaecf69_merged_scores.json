@@ -1,0 +1,58 @@
+[
+  {
+    "start": 0.0,
+    "end": 4.0,
+    "v_score": 0.865,
+    "c_score": 0.1,
+    "final_score": 0.635
+  },
+  {
+    "start": 4.0,
+    "end": 8.0,
+    "v_score": 0.865,
+    "c_score": 0.2,
+    "final_score": 0.665
+  },
+  {
+    "start": 8.0,
+    "end": 12.0,
+    "v_score": 0.865,
+    "c_score": 0.3,
+    "final_score": 0.695
+  },
+  {
+    "start": 12.0,
+    "end": 14.765,
+    "v_score": 0.749,
+    "c_score": 0.3,
+    "final_score": 0.614
+  },
+  {
+    "start": 14.765,
+    "end": 18.227,
+    "v_score": 0.823,
+    "c_score": 0.5,
+    "final_score": 0.726
+  },
+  {
+    "start": 18.227,
+    "end": 22.227,
+    "v_score": 0.865,
+    "c_score": 0.7,
+    "final_score": 0.815
+  },
+  {
+    "start": 22.227,
+    "end": 23.607,
+    "v_score": 0.499,
+    "c_score": 0.7,
+    "final_score": 0.559
+  },
+  {
+    "start": 23.607,
+    "end": 25.609,
+    "v_score": 0.632,
+    "c_score": 0.7,
+    "final_score": 0.652
+  }
+]

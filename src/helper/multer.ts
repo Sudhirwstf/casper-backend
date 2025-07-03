@@ -10,7 +10,7 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-
+ //---------------------multer disk storage-----------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadDir);
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   },
 });
 
-// Filter to allow only images
+// ----------------Filter to allow only images
 const imageFileFilter = (req: any, file: any, cb: any) => {
   if (!file.mimetype.startsWith("image/")) {
     const error: any = new Error("Only image files are allowed");
@@ -39,6 +39,8 @@ export const uploadImage = multer({
 });
 
 
+
+//--------------------------audio file filter
 export const audioFileFilter = (req: any, file: any, cb: any) => {
   if (!file.mimetype.startsWith("audio/")) {
     const error: any = new Error("Only audio files are allowed");
@@ -54,9 +56,21 @@ export const uploadAudio = multer({
  
 });
 
+const videoFileFilter = (req: any, file: any, cb: any) => {
+  if (!file.mimetype.startsWith("video/")) {
+    const error: any = new Error("Only video files are allowed");
+    error.statusCode = 400;
+    return cb(error, false);
+  }
+  cb(null, true);
+}
+
+export const uploadVideo = multer({
+  storage,
+  fileFilter: videoFileFilter,
+})
+
 // error handler
-
-
 
 export function multerHandler(middleware: any) {
   return (req: Request, res: Response, next: NextFunction) => {

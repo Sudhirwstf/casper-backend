@@ -8,7 +8,7 @@ import { auth } from "../controllers/auth";
 
 import multer from 'multer';
 import { articleValidator } from "../validators/articleValidator";
-import { multerHandler, uploadAudio, uploadImage } from "../helper/multer";
+import { multerHandler, uploadAudio, uploadImage, uploadVideo } from "../helper/multer";
 
 
 
@@ -341,5 +341,45 @@ router.post('/generate-image',multerHandler(uploadImage.single('image')),authent
 router.post('/generate-audio',multerHandler(uploadAudio.single('audio')),authenticateUser,validateRequest(articleValidator.audioValidator),articleController.generateContentAudio);
 
 
+
+/**
+ * @swagger
+ * /article/generate-video:
+ *   post:
+ *     summary: Generate platform videos and download as ZIP
+ *     tags:
+ *       - Article
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               video:
+ *                 type: string
+ *                 example: "aaa1.mp4"
+ *               platforms:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["instagram", "youtube"]
+ *     responses:
+ *       200:
+ *         description: ZIP file containing platform videos
+ *         content:
+ *           application/zip:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Video generation failed
+ *       500:
+ *         description: Internal server error
+ */
+
+
+// video generation
+router.post('/generate-video',multerHandler(uploadVideo.single('video')),authenticateUser,validateRequest(articleValidator.videoContentValidator),articleController.generateContentVideo);
 
 export default router

@@ -6,6 +6,8 @@ import path from "path";
 import dbservices from "../services/dbservices";
 import { runPythonScript } from "../helper/articleImageHelper";
 import { runPythonScriptAudio } from "../helper/articleAudioHelper";
+import { runPythonScriptVideo } from "../helper/articleVideoHelper";
+import { createVideoZip } from "../helper/zipHelper";
 
 // platform must be array of social media
 type Platform =
@@ -197,6 +199,8 @@ export default class articleController {
 
       const { platforms, description, useAI, styleChoice, colorChoice } = req.body;
 
+     
+
       if (!platforms) {
          await fs.unlink(req.file.path);
         return res.status(400).json({ error: 'Platforms are required.' });
@@ -362,4 +366,161 @@ export default class articleController {
     
   }
   }
+
+
+  //-------------------------------------Video Generation controller------------------------------------//
+  // static generateContentVideo=async (req:AuthenticateRequest,res:Response):Promise<any>=>{
+
+  //   try {
+  //     const {video,platforms}=req.body
+  //     console.log("platforms",platforms);
+
+  //     //const sessionId:any  =await runPythonScriptVideo(video,platforms); 
+  //     const sessionId:string ="f2aad709-6af7-4dd2-958b-42b915cb51ba"
+  //     console.log('Id of session',sessionId);
+
+      
+
+  //     if(!sessionId){
+  //       return res.status(400).json({ status: false, message: "Failed to generate video" });
+  //     }
+  //     const videopath=await fs.readdir('./Ai_video_optimizer/output/formatted')
+
+  //     //find all video starts with uuid
+  //     const matchedVideoFiles:any= videopath.filter(file => file.startsWith(sessionId) && file.endsWith('.mp4'));
+
+  //     if(matchedVideoFiles.length===0){
+  //       return res.status(400).json({ status: false, message: "Failed to generate video" });
+  //     }
+  //     // for all video in formatted folder return all paths
+     
+      
+  //     // const videoPath = path.join('./Ai_video_optimizer/output/formatted', matchedVideoFiles);
+  //     // console.log('videoPath',videoPath);
+
+  //     //video tags json file
+  //     const videojsonPath:any = path.join('./Ai_video_optimizer');
+  //     const matchedVideoJsonFiles:any= videojsonPath.filter(file => file.startsWith("session_") && file.endsWith('.json') && file.includes(sessionId));
+  //     const videoContent = await fs.readFile(matchedVideoJsonFiles[0], 'utf-8');
+  //     const videoData = JSON.parse(videoContent);
+
+  //     //delte all the files starting with session id
+  //     const videoFilesToDelete = matchedVideoFiles.filter(file => file.startsWith(sessionId));
+  //     for (const file of videoFilesToDelete) {
+  //       const filePath = path.join('./Ai_video_optimizer/output/formatted', file);
+  //       await fs.unlink(filePath);
+  //     }
+
+      
+  //     return res.status(200).json({ status: true, sessionId, message: "Video generated successfully", video: matchedVideoFiles});
+  //   } catch (error) {
+  //     console.error("Error occurred in generating Video:", error);
+  //     res.status(500).json({ status: false, message: "Failed to generate video" });
+  //   }
+  // }
+
+
+
+
+  static generateContentVideo = async (req: AuthenticateRequest, res: Response): Promise<any> => {
+    try {
+      const {platforms}  = req.body;
+      console.log("Requested platforms:", platforms);
+
+
+
+      console.log(req.file.path)
+      const uploadedVieoPath=req.file.path
+
+      
+  
+      const sessionId:string = await runPythonScriptVideo(uploadedVieoPath, platforms.split(',').map((platform) => platform.trim()));
+      // const sessionId:string="f2aad709-6af7-4dd2-958b-42b915cb51ba"
+    
+ 
+      console.log("Generated session ID:", sessionId);
+
+      if (!sessionId) {
+        return res.status(400).json({ status: false, message: "Failed to generate video" });
+      }
+
+      // Looking for generated video(s)
+      const formattedDir = './output/formatted';
+      const allFiles = await fs.readdir(formattedDir);
+      const matchedVideoFiles = allFiles.filter(file => file.startsWith(sessionId) && file.endsWith('.mp4'));
+
+      if (matchedVideoFiles.length === 0) {
+        return res.status(404).json({ status: false, message: "No generated video found" });
+      }
+
+      // Finding associated JSON session file
+      const baseDir = './output';
+      const baseFiles = await fs.readdir(baseDir);
+      const jsonFile = baseFiles.find(file =>
+        file.startsWith(`session_${sessionId}`) && file.endsWith('.json') 
+      );
+      console.log("JSON session file:", jsonFile);
+
+      let videoData = {};
+      if (jsonFile) {
+        const jsonFilePath = path.join(baseDir, jsonFile);
+        const jsonContent = await fs.readFile(jsonFilePath, 'utf-8');
+        videoData = JSON.parse(jsonContent);
+
+      
+       
+      }
+
+      
+
+
+    //  Create ZIP file
+    const zipPath = await createVideoZip(sessionId, matchedVideoFiles, videoData);
+
+    const zipName = path.basename(zipPath);
+
+    //-------------->deleting the uploaded video locally
+    await fs.unlink(req.file.path);
+    
+
+    //-------------->deleting json file meta data
+    const jsonFilePath = path.join(baseDir, jsonFile);
+    await fs.unlink(jsonFilePath);
+
+    //------------->Deleting the video files
+      for (const file of matchedVideoFiles) {
+        const filePath = path.join(formattedDir, file);
+        await fs.unlink(filePath);
+      }
+
+
+
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", `attachment; filename="${zipName}"`);
+    return res.sendFile(path.resolve(zipPath), async (err) => {
+      if (err) {
+        console.error("Error sending ZIP:", err);
+      }
+
+      // ceaning zip file after 1 min
+      setTimeout(async () => {
+        try {
+          await fs.unlink(zipPath);
+          console.log("Deleted ZIP:", zipPath);
+        } catch (err) {
+          console.warn("ZIP deletion failed:", zipPath);
+        }
+      }, 60000);
+    });
+
+    
+    } catch (error: any) {
+      console.error("Error in generateContentVideo:", error);
+      return res.status(500).json({
+        status: false,
+        message: "Failed to generate video",
+        error: error.message || error
+      });
+    }
+  };
 }

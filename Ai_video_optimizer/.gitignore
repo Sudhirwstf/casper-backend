@@ -1,0 +1,25 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Environments ---
+.env
+venv/
+.venv/
+
+# --- Project Output ---
+output/
+clips/
+data/
+temp/
+frames/
+*.log
+
+# --- OS/Editor ---
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
