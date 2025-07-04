@@ -248,7 +248,7 @@ router.post('/generate-image',multerHandler(uploadImage.single('image')),authent
  *     summary: Upload an audio file and generate enhanced podcast/audio content.
  *     tags:
  *       - Article
- *      security:
+ *     security:
  *       - bearerAuth: []  # Requires Bearer token via Authorize button
  *     consumes:
  *       - multipart/form-data

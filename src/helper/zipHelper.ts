@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 
 export async function createVideoZip(sessionId: string, files: string[], videoData: any): Promise<string> {
-  const outputDir = './Ai_video_optimizer/output/formatted';
+  const outputDir = './output/formatted';
   const zipPath = `./temp/${sessionId}.zip`;
   const metadataPath = `./temp/${sessionId}_meta.json`;
 
