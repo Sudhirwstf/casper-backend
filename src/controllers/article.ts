@@ -7,6 +7,7 @@ import { runPythonScript } from "../helper/articleImageHelper";
 import { runPythonScriptAudio } from "../helper/articleAudioHelper";
 import { runPythonScriptVideo } from "../helper/articleVideoHelper";
 import { createVideoZip } from "../helper/zipHelper";
+import { is } from "drizzle-orm";
 
 // platform must be array of social media
 type Platform =
@@ -31,10 +32,7 @@ interface AuthenticateRequest extends Request {
 }
 
 export default class articleController {
-  static generateArticle = async (
-    req: AuthenticateRequest,
-    res: Response
-  ): Promise<void> => {
+  static generateArticle = async (req: AuthenticateRequest,res: Response ): Promise<void> => {
     try {
       const userId = req.user?.userId;
 
@@ -217,15 +215,25 @@ export default class articleController {
 
   //------------------------------Generate Content Image------------------------------//
 
-  static generateContentImage = async (
-    req: AuthenticateRequest,
-    res: Response
-  ): Promise<any> => {
+  static generateContentImage = async (req: AuthenticateRequest,res: Response): Promise<any> => {
     try {
-      const userId = req.user?.userId;
+     const userId = req.user?.userId;
 
+      console.log("userId", userId);
       if (!userId) {
-        return res.status(401).json({ error: "Unauthorized user." });
+        res.status(401).send({ status: false, message: "UNAUTHORIZED USER" });
+        return;
+      }
+      const { platforms, description, useAI, styleChoice, colorChoice } =req.body;
+      const isEnoughCredits = await dbservices.ArticleServices.checkEnoughCredits(+userId);
+      const requiredCredits=platforms.split(",").length *5;
+
+       if (isEnoughCredits<requiredCredits) {
+        return res.status(400).json({
+          status: false,
+          credits: isEnoughCredits,
+          message: "Not enough credits to generate content.You need "+requiredCredits+" credits",
+        });
       }
 
       if (!req.file) {
@@ -248,8 +256,7 @@ export default class articleController {
         });
       }
 
-      const { platforms, description, useAI, styleChoice, colorChoice } =
-        req.body;
+      
 
       if (!platforms) {
         await fs.unlink(req.file.path);
@@ -343,6 +350,8 @@ export default class articleController {
         await fs.unlink(jsonPath);
       }
 
+      await dbservices.ArticleServices.deductCredits(+userId, requiredCredits);
+
       return res.status(200).json({
         success: true,
         sessionId,
@@ -359,11 +368,24 @@ export default class articleController {
 
   //-------------------------------------Audio Generation controller------------------------------------//
 
-  static generateContentAudio = async (
-    req: AuthenticateRequest,
-    res: Response
-  ): Promise<any> => {
+  static generateContentAudio = async (req: AuthenticateRequest,res: Response): Promise<any> => {
     try {
+     const userId = req.user?.userId;
+
+      console.log("userId", userId);
+      if (!userId) {
+        res.status(401).send({ status: false, message: "UNAUTHORIZED USER" });
+        return;
+      }
+      const isEnoughCredits = await dbservices.ArticleServices.checkEnoughCredits(+userId);
+
+       if (isEnoughCredits<=5) {
+        return res.status(400).json({
+          status: false,
+          credits: isEnoughCredits,
+          message: "Not enough credits  . You need aleast 5 credits ",
+        });
+      }
       if (!req.file) {
         return res.status(400).json({ error: "Audio is required." });
       }
@@ -427,6 +449,8 @@ export default class articleController {
         await fs.unlink(filePath);
       }
 
+      await dbservices.ArticleServices.deductCredits(+userId, 5);
+
       return res.status(200).json({
         status: true,
         sessionId,
@@ -447,10 +471,35 @@ export default class articleController {
   static generateContentVideo = async (req: AuthenticateRequest,res: Response): Promise<any> => {
     try {
       const { platforms } = req.body;
+
+      const userId = req.user?.userId;
+      if(!userId){
+        return res.status(400).json({ status: false, message: "Unauthorized" });
+      }
+
+      // credits required for each platform
+      const requiredCredits=platforms.split(",").length *5;
+
+      const isEnoughCredits = await dbservices.ArticleServices.checkEnoughCredits(+userId);
+      
+
+      if (isEnoughCredits<=requiredCredits) {
+        return res.status(400).json({
+          status: false,
+          credits: isEnoughCredits,
+          message: "Not enough credits to generate video . You need 5 credits for each platform",
+        });
+      }
       console.log("Requested platforms:", platforms);
+
+      
+
+      
 
       console.log(req.file.path);
       const uploadedVieoPath = req.file.path;
+
+      
 
       const sessionId: string = await runPythonScriptVideo(
         uploadedVieoPath,
@@ -523,6 +572,10 @@ export default class articleController {
         const filePath = path.join("./temp", file);
         await fs.unlink(filePath);
       }
+
+
+      //credits deduction
+      await dbservices.ArticleServices.deductCredits(+userId,requiredCredits);
 
       res.setHeader("Content-Type", "application/zip");
       res.setHeader("Content-Disposition", `attachment; filename="${zipName}"`);

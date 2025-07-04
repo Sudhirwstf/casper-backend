@@ -162,7 +162,7 @@ router.post('/generate-article',authenticateUser,validateRequest(articleValidato
  *               platforms:
  *                 type: string
  *                 description: Comma-separated list of target platforms
- *                 example: instagram,twitter
+ *                 example: instagram,facebook
  *               description:
  *                 type: string
  *                 description: Description for the image

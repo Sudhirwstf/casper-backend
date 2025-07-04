@@ -3,10 +3,7 @@ import postgreDb from "../../config/db";
 import { articles, users } from "../../models/schema";
 
 export class ArticleServices {
-  static saveArticles = async (
-    textFiles:any,
-    userId: number
-  ) => {
+  static saveArticles = async (textFiles:any,userId: number) => {
     // Validate userId is a number
     if (isNaN(userId)) throw new Error("User ID is NaN");
 
@@ -60,6 +57,32 @@ export class ArticleServices {
     try{
        
      
+    }catch(error:any){
+        throw new Error(error)
+    }
+  }
+
+  static checkEnoughCredits=async(userId: number):Promise<any>=>{
+    try{
+        const [user] = await postgreDb
+        .select({ credits:users.credits })
+        .from(users)
+        .where(eq(users.id, userId));
+        console.log(user.credits,"db")
+        return user.credits
+    }catch(error:any){
+        throw new Error(error)
+    }
+  }
+
+  static deductCredits=async(userId: number,amount:number):Promise<any>=>{
+    try{
+        await postgreDb
+        .update(users)
+        .set({
+          credits: sql`${users.credits} - ${amount}`,
+        })
+        .where(eq(users.id, userId));
     }catch(error:any){
         throw new Error(error)
     }
